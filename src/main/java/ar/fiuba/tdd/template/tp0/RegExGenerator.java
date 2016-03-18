@@ -5,26 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RegExGenerator {
-    // TODO: Uncomment this field
-    private int maxLength;
     private RegExParser parser;
     private List<RegExToken> tokens;
     private ArrayList<String> matchedStrings;
 
     public RegExGenerator(int maxLength) {
-        this.maxLength = maxLength;
-        this.parser = new RegExParser();
+        this.parser = new RegExParser(maxLength);
     }
 
     private String matchString() {
-        String matchedString = "";
+        StringBuilder matchedString = new StringBuilder();
         for (RegExToken token:tokens) {
-            matchedString = matchedString + token.make();
+            matchedString.append(token.make());
         }
-        return matchedString;
+        return matchedString.toString();
     }
 
-    // TODO: Uncomment parameters
     public List<String> generate(String regEx, int numberOfResults) {
         tokens = parser.parseString(regEx);
         matchedStrings = new ArrayList<String>();

@@ -4,17 +4,18 @@ import java.util.Random;
 
 public class RegExToken {
     static final int MAX_NUMBER_QUESTION_MARK = 1;
-    static final int MAX_NUMBER_QUANTIFIER = 50;
     static final int MIN_OCCURRENCE = 1;
 
     private String token;
     private  Random random;
     private char quantifier;
+    private int maxLength;
     private int occurrences;
     private boolean isLiteral;
     private boolean haveQuantifier;
 
-    public RegExToken() {
+    public RegExToken(int maxLength) {
+        this.maxLength = maxLength;
         isLiteral = false;
         random = new Random();
     }
@@ -38,48 +39,48 @@ public class RegExToken {
 
     private int randomFromQuantifier() {
         if ( quantifier == '+' ) {
-            occurrences = random.nextInt(MAX_NUMBER_QUANTIFIER) + 1;
+            occurrences = random.nextInt(maxLength) + 1;
         } else if ( quantifier == '?' ) {
             occurrences = random.nextInt(MAX_NUMBER_QUESTION_MARK + 1);
         } else if ( quantifier == '*' ) {
-            occurrences = random.nextInt(MAX_NUMBER_QUANTIFIER);
+            occurrences = random.nextInt(maxLength);
         }
 
         return occurrences;
     }
 
     private String matchSet() {
-        String matched = "";
+        StringBuilder matched = new StringBuilder();
         int tokenLength = this.token.length();
         String set = this.token.substring(1, tokenLength - 1);
         int setLength = set.length();
         for (int i = 0; i < occurrences; i++) {
-            matched = matched + set.charAt(random.nextInt(setLength));
+            matched.append(set.charAt(random.nextInt(setLength)));
         }
-        return matched;
+        return matched.toString();
     }
 
     private String matchDot() {
-        String matched = "";
+        StringBuilder matched = new StringBuilder();
         for (int i = 0; i < occurrences; i++) {
-            matched = matched + (char) random.nextInt(256);
+            matched.append((char) random.nextInt(256));
         }
-        return matched;
+        return matched.toString();
     }
 
     private String matchLiteral() {
-        String matched = "";
+        StringBuilder matched = new StringBuilder();
         for (int i = 0; i < occurrences; i++) {
-            matched = matched + this.token;
+            matched.append(this.token);
         }
-        return matched;
+        return matched.toString();
     }
 
     public String make() {
         occurrences = haveQuantifier ? randomFromQuantifier() : MIN_OCCURRENCE;
         if (this.token.charAt(0) == '[' && !this.isLiteral) {
             return matchSet();
-        } else if (this.token == "." && !this.isLiteral) {
+        } else if (this.token.equals(".") && !this.isLiteral) {
             return matchDot();
         }
         return matchLiteral();
