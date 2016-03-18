@@ -1,7 +1,5 @@
-/**
- * Created by sebastian on 16/03/16.
- */
 package ar.fiuba.tdd.template.tp0;
+
 import java.util.Random;
 
 public class RegExToken {
@@ -16,21 +14,24 @@ public class RegExToken {
     private boolean isLiteral;
     private boolean haveQuantifier;
 
-    public RegExToken(){
+    public RegExToken() {
         isLiteral = false;
         random = new Random();
     }
-    public void setLiteral( char literal){
+
+    public void setLiteral( char literal) {
         this.token = Character.toString(literal);
-        isLiteral =true;
+        isLiteral = true;
     }
+
     public void setToken(String token) {
         this.token = token;
-        if( ! token.equals(".") && ! token.contains("[")) {
+        if ( ! token.equals(".") && ! token.contains("[")) {
             this.isLiteral = true;
         }
     }
-    public void setQuantifier(char quantifier){
+
+    public void setQuantifier(char quantifier) {
         this.quantifier = quantifier;
         this.haveQuantifier = true;
     }
@@ -52,24 +53,26 @@ public class RegExToken {
         int tokenLength = this.token.length();
         String set = this.token.substring(1, tokenLength - 1);
         int setLength = set.length();
-        for (int i = 0; i < occurrences; i++)
-           matched = matched + set.charAt(random.nextInt(setLength));
+        for (int i = 0; i < occurrences; i++) {
+            matched = matched + set.charAt(random.nextInt(setLength));
+        }
         return matched;
     }
 
     private String matchDot() {
         String matched = "";
-        for (int i = 0; i < occurrences; i++)
+        for (int i = 0; i < occurrences; i++) {
             matched = matched + (char) random.nextInt(256);
+        }
         return matched;
     }
 
     private String matchLiteral() {
-            String matched = "";
-            for (int i = 0; i < occurrences; i++) {
-                matched = matched + this.token;
-            }
-            return matched;
+        String matched = "";
+        for (int i = 0; i < occurrences; i++) {
+            matched = matched + this.token;
+        }
+        return matched;
     }
 
     public String make() {
