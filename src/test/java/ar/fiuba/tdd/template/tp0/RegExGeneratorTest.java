@@ -2,18 +2,24 @@ package ar.fiuba.tdd.template.tp0;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class RegExGeneratorTest {
 
     private boolean validate(String regEx, int numberOfResults) {
-        RegExGenerator generator = new RegExGenerator(100);
-        // TODO: Uncomment parameters
-        List<String> results = generator.generate(regEx, numberOfResults);
+        RegExGenerator generator = new RegExGenerator(20);
+        List<String> results = null;
+        try {
+            results = generator.generate(regEx, numberOfResults);
+        } catch (RegExFormatException e) {
+            return false;
+        }
         // force matching the beginning and the end of the strings
         Pattern pattern = Pattern.compile("^" + regEx + "$");
         return results
@@ -26,11 +32,30 @@ public class RegExGeneratorTest {
                     (item1, item2) -> item1 && item2);
     }
 
-    //TODO: Uncomment these tests
-
     @Test
     public void testAnyCharacter() {
         assertTrue(validate(".", 1));
+    }
+    @Test
+    public void testOneLetter() {
+        assertTrue(validate("a", 1));
+    }
+
+    @Test
+    public void testNegativeOnlyOneQuantifier() {
+        assertFalse(validate("?", 1));
+    }
+    @Test
+    public void testDoubleQuantifier() {
+        assertFalse(validate(".??", 1));
+    }
+    @Test
+    public void testDoubleQuantifier2() {
+        assertFalse(validate(".**", 1));
+    }
+    @Test
+    public void testDoubleQuantifier3() {
+        assertFalse(validate(".++", 1));
     }
 
     @Test
@@ -63,5 +88,23 @@ public class RegExGeneratorTest {
         assertTrue(validate("[abc]+", 1));
     }
 
-    // TODO: Add more tests!!!
+    @Test
+    public void testLongRegEx() {
+        assertTrue(validate("t*.*,..*.*.*..+.+.+\\+.*", 1));
+    }
+    @Test
+    public void testEscapedCharacterAndQuantifier() {
+        assertTrue(validate("\\+?", 1));
+    }
+
+    @Test
+    public void testEscapedCharacterAndQuantifier2() {
+        assertTrue(validate("\\+*", 1));
+    }
+
+    @Test
+    public void testEscapedCharacterAndQuantifier3() {
+        assertTrue(validate("\\++", 1));
+    }
+
 }

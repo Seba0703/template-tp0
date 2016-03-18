@@ -27,7 +27,15 @@ public class RegExParser {
         }
     }
 
-    public List<RegExToken> parseString(String regEx) {
+    private RegExToken lastToken() throws RegExFormatException{
+        if(tokens.size() > 0) {
+            return tokens.get(tokens.size() - 1);
+        } else {
+            throw new RegExFormatException();
+        }
+    }
+
+    public List<RegExToken> parseString(String regEx) throws RegExFormatException{
         for (int i = 0; i < regEx.length(); i++) {
             char character = regEx.charAt(i);
             RegExToken token = new RegExToken(maxLength);
@@ -37,7 +45,11 @@ public class RegExParser {
             } else if (character == '[') {
                 i = defineSet(token, regEx, i);
             } else if (isQuantifier(character)) {
-                tokens.get(tokens.size() - 1).setQuantifier(character);
+                if (!lastToken().haveQuantifier()) {
+                    lastToken().setQuantifier(character);
+                } else {
+                    throw new RegExFormatException();
+                }
             } else {
                 token.setToken(Character.toString(character));
             }

@@ -21,7 +21,7 @@ public class RegExGenerator {
         return matchedString.toString();
     }
 
-    public List<String> generate(String regEx, int numberOfResults) {
+    public List<String> generate(String regEx, int numberOfResults) throws RegExFormatException {
         tokens = parser.parseString(regEx);
         matchedStrings = new ArrayList<String>();
         for (int i = 0; i < numberOfResults; i++)  {

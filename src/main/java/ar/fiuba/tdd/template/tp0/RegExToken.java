@@ -7,7 +7,9 @@ public class RegExToken {
     static final int MIN_OCCURRENCE = 1;
 
     private String token;
-    private  Random random;
+    private Random randomSet;
+    private RandomInRanges randomDot;
+    private Random randomQuantifiers;
     private char quantifier;
     private int maxLength;
     private int occurrences;
@@ -17,7 +19,13 @@ public class RegExToken {
     public RegExToken(int maxLength) {
         this.maxLength = maxLength;
         isLiteral = false;
-        random = new Random();
+        randomSet = new Random();
+        randomDot = new RandomInRanges();
+        randomQuantifiers = new Random();
+    }
+
+    public boolean haveQuantifier(){
+        return haveQuantifier;
     }
 
     public void setLiteral( char literal) {
@@ -39,11 +47,11 @@ public class RegExToken {
 
     private int randomFromQuantifier() {
         if ( quantifier == '+' ) {
-            occurrences = random.nextInt(maxLength) + 1;
+            occurrences = randomQuantifiers.nextInt(maxLength) + 1;
         } else if ( quantifier == '?' ) {
-            occurrences = random.nextInt(MAX_NUMBER_QUESTION_MARK + 1);
+            occurrences = randomQuantifiers.nextInt(MAX_NUMBER_QUESTION_MARK + 1);
         } else if ( quantifier == '*' ) {
-            occurrences = random.nextInt(maxLength);
+            occurrences = randomQuantifiers.nextInt(maxLength + 1);
         }
 
         return occurrences;
@@ -55,7 +63,7 @@ public class RegExToken {
         String set = this.token.substring(1, tokenLength - 1);
         int setLength = set.length();
         for (int i = 0; i < occurrences; i++) {
-            matched.append(set.charAt(random.nextInt(setLength)));
+            matched.append(set.charAt(randomSet.nextInt(setLength)));
         }
         return matched.toString();
     }
@@ -63,7 +71,8 @@ public class RegExToken {
     private String matchDot() {
         StringBuilder matched = new StringBuilder();
         for (int i = 0; i < occurrences; i++) {
-            matched.append((char) random.nextInt(256));
+            int randNum = randomDot.getRandom();
+            matched.append((char) randNum);
         }
         return matched.toString();
     }
