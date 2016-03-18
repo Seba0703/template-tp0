@@ -1,6 +1,7 @@
 /**
  * Created by sebastian on 16/03/16.
  */
+package ar.fiuba.tdd.template.tp0;
 import java.util.Random;
 
 public class RegExToken {
