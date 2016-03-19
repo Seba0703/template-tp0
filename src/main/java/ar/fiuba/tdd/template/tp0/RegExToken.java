@@ -33,10 +33,18 @@ public class RegExToken {
         isLiteral = true;
     }
 
-    public void setToken(String token) {
+    private boolean isLiteral(){
+        return(!token.equals(".") && !token.contains("[") );
+    }
+
+    public void setToken(String token) throws RegExFormatException {
         this.token = token;
-        if ( ! token.equals(".") && ! token.contains("[")) {
-            this.isLiteral = true;
+        if ( isLiteral() ) {
+            if ( ! token.contains("]")) {
+                this.isLiteral = true;
+            } else {
+                throw new RegExFormatException();
+            }
         }
     }
 
@@ -93,7 +101,5 @@ public class RegExToken {
             return matchDot();
         }
         return matchLiteral();
-
     }
-
 }

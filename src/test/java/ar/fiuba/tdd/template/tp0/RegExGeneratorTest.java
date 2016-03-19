@@ -36,6 +36,7 @@ public class RegExGeneratorTest {
     public void testAnyCharacter() {
         assertTrue(validate(".", 1));
     }
+
     @Test
     public void testOneLetter() {
         assertTrue(validate("a", 1));
@@ -45,16 +46,11 @@ public class RegExGeneratorTest {
     public void testNegativeOnlyOneQuantifier() {
         assertFalse(validate("?", 1));
     }
+
     @Test
     public void testDoubleQuantifier() {
         assertFalse(validate(".??", 1));
-    }
-    @Test
-    public void testDoubleQuantifier2() {
         assertFalse(validate(".**", 1));
-    }
-    @Test
-    public void testDoubleQuantifier3() {
         assertFalse(validate(".++", 1));
     }
 
@@ -90,21 +86,40 @@ public class RegExGeneratorTest {
 
     @Test
     public void testLongRegEx() {
-        assertTrue(validate("t*.*,..*.*.*..+.+.+\\+.*", 1));
+        assertTrue(validate("t*.*,..*.*.*..+.+.+\\+.*", 100));
     }
     @Test
     public void testEscapedCharacterAndQuantifier() {
         assertTrue(validate("\\+?", 1));
-    }
-
-    @Test
-    public void testEscapedCharacterAndQuantifier2() {
         assertTrue(validate("\\+*", 1));
+        assertTrue(validate("\\++", 1));
+        assertTrue(validate("\\*+", 1));
+        assertTrue(validate("\\*?", 1));
+        assertTrue(validate("\\**", 1));
+        assertTrue(validate("\\?*", 1));
+        assertTrue(validate("\\??", 1));
+        assertTrue(validate("\\?+", 1));
     }
 
     @Test
-    public void testEscapedCharacterAndQuantifier3() {
-        assertTrue(validate("\\++", 1));
+    public void testSetWithEscapes() {
+        assertTrue(validate("[a\\]\\?\\?\\]\\*2dbsd\\[hh\\.\\+kk]", 1));
+    }
+
+    @Test
+    public void testNegativeBadSetFormat() {
+        assertFalse(validate("d[abcd]]s", 1));
+        assertFalse(validate("d[[abcd]s", 1));
+        assertFalse(validate("abcd]", 1));
+        assertFalse(validate("s[abcd", 1));
+    }
+
+    @Test
+    public void testNegativeBadSetFormat2() {
+        assertFalse(validate("[?]", 1));
+        assertFalse(validate("[.]", 1));
+        assertFalse(validate("[*]", 1));
+        assertFalse(validate("[+]", 1));
     }
 
 }
