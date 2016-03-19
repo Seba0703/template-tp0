@@ -14,15 +14,15 @@ class RandomInRanges {
     static final int [][] ranges = {firstRange,secondRange};
     private final List<Integer> range = new ArrayList<>();
 
-    RandomInRanges(){
-        for(int j = 0 ; j <= 1 ; j++) {
+    RandomInRanges() {
+        for (int j = 0 ; j <= 1 ; j++) {
             for (int num = ranges[j][0]; num < ranges[j][1]; num++) {
                 this.range.add(num);
             }
         }
     }
 
-    int getRandom() {
+    public int getRandom() {
         return this.range.get(new Random().nextInt(this.range.size()));
     }
 }

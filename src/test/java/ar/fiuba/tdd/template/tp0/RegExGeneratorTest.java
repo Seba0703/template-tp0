@@ -14,7 +14,7 @@ public class RegExGeneratorTest {
 
     private boolean validate(String regEx, int numberOfResults) {
         RegExGenerator generator = new RegExGenerator(20);
-        List<String> results = null;
+        List<String> results;
         try {
             results = generator.generate(regEx, numberOfResults);
         } catch (RegExFormatException e) {
@@ -33,6 +33,11 @@ public class RegExGeneratorTest {
     }
 
     @Test
+    public void testEmptyRegEx() {
+        assertTrue(validate("", 1));
+    }
+
+    @Test
     public void testAnyCharacter() {
         assertTrue(validate(".", 1));
     }
@@ -45,6 +50,8 @@ public class RegExGeneratorTest {
     @Test
     public void testNegativeOnlyOneQuantifier() {
         assertFalse(validate("?", 1));
+        assertFalse(validate("*", 1));
+        assertFalse(validate("+", 1));
     }
 
     @Test
@@ -88,6 +95,7 @@ public class RegExGeneratorTest {
     public void testLongRegEx() {
         assertTrue(validate("t*.*,..*.*.*..+.+.+\\+.*", 100));
     }
+
     @Test
     public void testEscapedCharacterAndQuantifier() {
         assertTrue(validate("\\+?", 1));
@@ -103,7 +111,9 @@ public class RegExGeneratorTest {
 
     @Test
     public void testSetWithEscapes() {
-        assertTrue(validate("[a\\]\\?\\?\\]\\*2dbsd\\[hh\\.\\+kk]", 1));
+        assertTrue(validate("[\\&a\\]\\?\\d\\]\\*2dbsd\\[hh\\.\\+kk]2*", 90));
+        assertTrue(validate("[\\]]", 1));
+        assertTrue(validate("[\\[]", 1));
     }
 
     @Test
@@ -120,6 +130,16 @@ public class RegExGeneratorTest {
         assertFalse(validate("[.]", 1));
         assertFalse(validate("[*]", 1));
         assertFalse(validate("[+]", 1));
+        assertFalse(validate("[]", 1));
+        assertFalse(validate("[", 1));
+        assertFalse(validate("]", 1));
     }
+
+    @Test
+    public void testManySets() {
+        assertTrue(validate("[as12\\]]?[as\\s]?as[5423]*.*[a\\?][asd]+",1));
+    }
+
+
 
 }

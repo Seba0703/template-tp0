@@ -24,7 +24,7 @@ public class RegExToken {
         randomQuantifiers = new Random();
     }
 
-    public boolean haveQuantifier(){
+    public boolean haveQuantifier() {
         return haveQuantifier;
     }
 
@@ -33,8 +33,8 @@ public class RegExToken {
         isLiteral = true;
     }
 
-    private boolean isLiteral(){
-        return(!token.equals(".") && !token.contains("[") );
+    private boolean isLiteral() {
+        return (!token.equals(".") && !token.contains("[") );
     }
 
     public void setToken(String token) throws RegExFormatException {

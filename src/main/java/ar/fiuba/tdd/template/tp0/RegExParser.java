@@ -21,7 +21,14 @@ public class RegExParser {
         return reservedCharacter.contains(character);
     }
 
+    private void ifEmptySetException(String set) throws RegExFormatException {
+        if (set.length() <= 2) {
+            throw new RegExFormatException();
+        }
+    }
+
     private String verifySetFormat(String set) throws RegExFormatException {
+        ifEmptySetException(set);       //i.e []
         //only search between square braces
         for (int i = 1; i < set.length() - 1; i++ ) {
             if (set.charAt(i) == '\\') {
@@ -39,7 +46,7 @@ public class RegExParser {
         return first != -1 && regEx.charAt(first - 1) == '\\' && first < regEx.length();
     }
 
-    private int indexOfFirstSquareBracketWithoutEscape(String regEx, int begin) throws RegExFormatException{
+    private int indexOfFirstSquareBracketWithoutEscape(String regEx, int begin) throws RegExFormatException {
         int first = regEx.indexOf("]",begin);
         while (stillEscaped(regEx, first)) {
             begin = first + 1;
@@ -66,7 +73,7 @@ public class RegExParser {
     }
 
     private RegExToken lastToken() throws RegExFormatException {
-        if(tokens.size() > 0) {
+        if (tokens.size() > 0) {
             return tokens.get(tokens.size() - 1);
         } else {
             throw new RegExFormatException();
@@ -77,23 +84,22 @@ public class RegExParser {
         for (int i = 0; i < regEx.length(); i++) {
             char character = regEx.charAt(i);
             RegExToken token = new RegExToken(maxLength);
-            if (character == '\\') {
+            if (character == '\\') {         // literals tokens
                 token.setLiteral(regEx.charAt(i + 1));
                 i++;
-            } else if (character == '[') {
+            } else if (character == '[') {   //  set tokens
                 i = defineSet(token, regEx, i);
             } else if (isQuantifier(character)) {
                 if (!lastToken().haveQuantifier()) {
-                    lastToken().setQuantifier(character);
+                    lastToken().setQuantifier(character);   // modify last token to add quantifier, no add to lis
                 } else {
                     throw new RegExFormatException();
                 }
             } else {
-                token.setToken(Character.toString(character));
+                token.setToken(Character.toString(character));  //dots
             }
             addTokenIfHaveNoQuantifier(token,character);
         }
         return tokens;
     }
-
 }
