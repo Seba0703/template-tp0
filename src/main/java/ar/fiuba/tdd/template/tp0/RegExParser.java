@@ -53,7 +53,7 @@ public class RegExParser {
             first = regEx.indexOf("]", begin);
         }
         if (first < 0) {
-            throw new RegExFormatException();
+            throw new RegExFormatException();   //not ends with ]
         }
         return first;
     }
@@ -80,6 +80,14 @@ public class RegExParser {
         }
     }
 
+    private void setQuantifier(char character) throws RegExFormatException {
+        if (!lastToken().haveQuantifier()) {
+            lastToken().setQuantifier(character);   // modify last token to add quantifier, no add to lis
+        } else {
+            throw new RegExFormatException();
+        }
+    }
+
     public List<RegExToken> parseString(String regEx) throws RegExFormatException {
         for (int i = 0; i < regEx.length(); i++) {
             char character = regEx.charAt(i);
@@ -90,11 +98,7 @@ public class RegExParser {
             } else if (character == '[') {   //  set tokens
                 i = defineSet(token, regEx, i);
             } else if (isQuantifier(character)) {
-                if (!lastToken().haveQuantifier()) {
-                    lastToken().setQuantifier(character);   // modify last token to add quantifier, no add to lis
-                } else {
-                    throw new RegExFormatException();
-                }
+                setQuantifier(character);
             } else {
                 token.setToken(Character.toString(character));  //dots
             }

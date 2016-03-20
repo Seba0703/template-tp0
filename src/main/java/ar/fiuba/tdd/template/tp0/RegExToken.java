@@ -61,7 +61,6 @@ public class RegExToken {
         } else if ( quantifier == '*' ) {
             occurrences = randomQuantifiers.nextInt(maxLength + 1);
         }
-
         return occurrences;
     }
 

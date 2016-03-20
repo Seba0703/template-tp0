@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.Random;
 
 /*
-Without 0 to 31 (new line, bell, Carriage Return, etc) and 127 to 159 (java handles Unicode like
-Start of String, Set Transmit State, etc)
+Without line feed 10 13 or 133
  */
-class RandomInRanges {
-    static final int[] firstRange = {32, 127};
-    static final int[] secondRange = {160, 256};
-    static final int [][] ranges = {firstRange,secondRange};
+class RandomInRanges{
+
     private final List<Integer> range = new ArrayList<>();
 
+    private boolean isNotLineFeed(int num) {
+        return ( num != 10 && num != 13 && num  != 133); //new line, Carriage Return, Next Line
+    }
+
     RandomInRanges() {
-        for (int j = 0 ; j <= 1 ; j++) {
-            for (int num = ranges[j][0]; num < ranges[j][1]; num++) {
-                this.range.add(num);
-            }
+        for (int j = 0 ; j <= 255 ; j++) {
+            if ( isNotLineFeed (j))
+                this.range.add(j);
         }
     }
 

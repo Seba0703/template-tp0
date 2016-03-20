@@ -2,7 +2,6 @@ package ar.fiuba.tdd.template.tp0;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +39,7 @@ public class RegExGeneratorTest {
     @Test
     public void testAnyCharacter() {
         assertTrue(validate(".", 1));
+        assertTrue(validate(".*", 10));
     }
 
     @Test
@@ -120,6 +120,8 @@ public class RegExGeneratorTest {
     public void testNegativeBadSetFormat() {
         assertFalse(validate("d[abcd]]s", 1));
         assertFalse(validate("d[[abcd]s", 1));
+        assertFalse(validate("d[ab[cd]s", 1));
+        assertFalse(validate("d[ab]cd]s", 1));
         assertFalse(validate("abcd]", 1));
         assertFalse(validate("s[abcd", 1));
     }
@@ -139,7 +141,4 @@ public class RegExGeneratorTest {
     public void testManySets() {
         assertTrue(validate("[as12\\]]?[as\\s]?as[5423]*.*[a\\?][asd]+",1));
     }
-
-
-
 }
